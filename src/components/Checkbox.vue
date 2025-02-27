@@ -1,23 +1,31 @@
 <script setup>
-import { useTemplateRef } from 'vue';
+import { defineProps, ref, defineEmits} from 'vue';
 
 defineProps({
-  text: String
-})
+  text: String,
+});
 
-const checkbox = useTemplateRef('checkbox');
+const isChecked = ref(false);
 
-const changeCheckboxState = () => {
-  checkbox.value.checked = !checkbox.value.checked;
-}
+const emit = defineEmits(['update:modelValue']);
+
+const handleCheckboxChange = () => {
+  emit('update:modelValue', isChecked.value);
+};
 
 </script>
 
 <template>
   <div class="checkbox-aceptar">
-    <label for="Terms"></label>
-    <input ref="checkbox" type="checkbox" name="Terminos" value="Terminos" />
+    <label for="Terminos">
+      <input 
+        type="checkbox" 
+        id="Terminos"
+        v-model="isChecked"
+        @change="handleCheckboxChange" 
+      />
       {{ text }}
+    </label>
   </div>
 </template>
 
@@ -26,36 +34,18 @@ const changeCheckboxState = () => {
     margin-bottom: 20px;
   }
 
-    label{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      color:black;
-    }
-
-    input {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-  .checkbox {
+  label {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    gap: 10px;
+    cursor: pointer;
+    color: black;
   }
 
-    label{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer
-    }
-
-    input {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
+  input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
 </style>
+

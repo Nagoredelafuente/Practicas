@@ -17,18 +17,18 @@
 
 <style scoped lang="scss">
   .boton-siguiente {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 
   .btn-siguiente {
     width: 100%;
     padding: 10px;
     border-radius: 30px;
     background: #7058E8;
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 1rem;
-    pointer-events: pointer;
+    cursor:pointer;
     display: flex;
     justify-content: center;
     align-items: center;

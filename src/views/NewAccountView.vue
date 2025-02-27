@@ -4,13 +4,46 @@
   import Checkbox from '@/components/Checkbox.vue';
   import IniciarSesion from '@/components/IniciarSesion.vue';
   import PruebaInput from '@/components/PruebaInput.vue';
+  import { ref } from 'vue';
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
 
-  function redirectToRegistro() {
-      router.push({ name: 'registro' });
+  const email = ref("");
+  const password = ref("");
+  const isCheckboxChecked = ref(false);
+
+function validarEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function redirectToReservaValidation() {
+  console.log("Email ingresado:", email.value);
+  console.log("Contraseña ingresada:", password.value);
+
+  let errores = [];
+
+  if (!validarEmail(email.value)) {
+    errores.push("Por favor, introduce un correo electrónico válido.");
   }
+
+  if (!password.value) {
+    errores.push("Por favor, introduce tu contraseña.");
+  } 
+  
+  if (!isCheckboxChecked.value) {
+    errores.push("Debes aceptar los términos y condiciones.");
+  }
+
+  if (errores.length > 0) {
+    alert("Errores detectados:\n- " + errores.join("\n- "));
+    return;
+  }
+
+  console.log("Validación exitosa. Redirigiendo...");
+  router.push({ name: "registro" });
+}
 
   function redirectToLogIn() {
       router.push({ name: 'login' });
@@ -19,20 +52,19 @@
 </script>
 
 <template>
-  <header>
-  </header>
+  
   <div class="pagina">
       <div class="container-formulario">
-            <h1>Access Robot</h1>
+            <h1 class="access-robot">Access Robot</h1>
             <img src="@/assets/image/ARturo.png" alt="robot" />
             <p>Crear nueva cuenta</p>
-            <PruebaInput inputType="email" placeholder="Introduce tu email"/>
-            <BotonVisibilidad placeholder="Introduce tu contraseña"/>
-            <Checkbox text="Acepto los terminos y condiciones de uso"/>
-            <BotonSiguiente @click="redirectToRegistro" text="Siguiente"/>
+            <PruebaInput v-model="email" inputType="email" placeholder="Introduce tu email"/>
+            <BotonVisibilidad v-model="password" :showValidations="true" placeholder="Introduce tu contraseña"/>
+            <Checkbox  v-model="isCheckboxChecked" text="Acepto los terminos y condiciones de uso"/>
+            <BotonSiguiente @click="redirectToReservaValidation" text="Siguiente"/>
             <p class="subrayado">¿Has olvidado tu contraseña?</p>
             <hr class="divider">
-            <p>¿No tienes cuenta?</p>
+            <p class="tienes-cuenta">¿No tienes cuenta?</p>
             <IniciarSesion  @click="redirectToLogIn" text="Ir a iniciar sesion"/>
       </div>
   </div>
@@ -68,7 +100,16 @@ p{
   margin-bottom: 5%;
 }
 
+.access-robot{
+  color: #000000;
+}
 
+.tienes-cuenta {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 1rem;
+  }
 .container-formulario {
     display: flex;
     flex-direction: column;
@@ -87,6 +128,7 @@ p{
 }
 
 .subrayado {
+  font-size: 1rem;
   text-decoration: underline;
   margin-top: 5%;
 }

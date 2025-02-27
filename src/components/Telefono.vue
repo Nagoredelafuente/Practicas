@@ -1,18 +1,24 @@
-<script>
-export default {
-    name: 'Telefono',
-    props: {
-        text: {
-            type: String,
-            default: 'Teléfono'
-        },
+<script setup>
+import { defineProps, defineEmits, computed } from "vue";
 
-        placeholder: {
-            type: String,
-            default: ''
+const props = defineProps({
+    modelValue: String,
+    text: {
+        type: String,
+        default: "Teléfono",
     },
-    }
-}
+    placeholder: {
+        type: String,
+        default: "",
+    },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const modelo = computed({
+    get: () => props.modelValue, 
+    set: (value) => emit("update:modelValue", value), 
+});
 </script>
 <template>
     <div class="container-telefono">
@@ -25,7 +31,7 @@ export default {
                 <option value="+32">+32</option>
                 <option value="+31">+31</option>
             </select>
-            <input type="tel" id="telefono" :placeholder="placeholder" required/>
+            <input type="tel" id="telefono" :placeholder="placeholder" v-model="modelo" required/>
         </div>
 
 
@@ -47,20 +53,20 @@ export default {
 .container-prefijo {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre el select y el input */
+    gap: 10px; 
     width: 100%;
     margin-top: 5px;
 }
 
 .container-prefijo select {
-    width: 20%; /* Ajusta el ancho del select */
+    width: 20%; 
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
 
 .container-prefijo input {
-    flex: 1; /* Hace que el input ocupe todo el espacio restante */
+    flex: 1; 
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;

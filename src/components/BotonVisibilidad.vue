@@ -1,30 +1,30 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-// Definir props
-defineProps({
+const props = defineProps({
   route: {
     type: String,
   },
   placeholder: {
-        type: String,
-        default: ''
-    },
+    type: String,
+    default: ''
+  },
+  showValidations: { 
+    type: Boolean,
+    default: false,
+  }
 });
 
-// Referencias reactivas
-const password = ref('');
+const password = defineModel();
 const isPasswordVisible = ref(false);
-const hasStartedTyping = ref(false); // Indica si el usuario ha comenzado a escribir
+const hasStartedTyping = ref(false); 
 
-// Reglas de validación
 const validationRules = [
   { id: 'length', regex: /.{8,16}/, message: 'Entre 8 y 16 caracteres' },
   { id: 'case', regex: /(?=.*[a-z])(?=.*[A-Z])/, message: 'Al menos una mayúscula y una minúscula' },
   { id: 'number', regex: /(?=.*\d)/, message: 'Al menos un número' },
 ];
 
-// Validación reactiva
 const validationResults = computed(() => {
   return validationRules.map(rule => ({
     id: rule.id,
@@ -33,12 +33,10 @@ const validationResults = computed(() => {
   }));
 });
 
-// Función para alternar la visibilidad de la contraseña
 function alternarVisibilidadPassword() {
   isPasswordVisible.value = !isPasswordVisible.value;
 }
 
-// Detectar cuando el usuario empieza a escribir
 function handleTyping() {
   if (!hasStartedTyping.value) {
     hasStartedTyping.value = true;
@@ -57,7 +55,7 @@ function handleTyping() {
             <input 
                 :type="isPasswordVisible ? 'text' : 'password'" 
                 id="contraseña"
-                v-model="password"
+                v-model="password" 
                 name="contraseña"
                 :placeholder="placeholder"
                 maxlength="50"
@@ -76,8 +74,7 @@ function handleTyping() {
             </button>
         </div>
 
-        <!-- Mensajes de validación (solo aparecen si el usuario ha escrito algo) -->
-        <div class="validation-messages" v-if="hasStartedTyping">
+        <div class="validation-messages" v-if="showValidations && hasStartedTyping">
             <p 
                 v-for="rule in validationResults" 
                 :key="rule.id" 
@@ -93,88 +90,84 @@ function handleTyping() {
 </template>
 
 <style>
-.form-group {
-  width: 100%;
-  margin-bottom: 1rem;
-}
+  .form-group {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
 
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #000;
-}
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #000;
+  }
+
+  input::-ms-reveal, input::-webkit-credentials-auto-fill-button {
+    display: none;
+  }
+
+  .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .password-container input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #666;
+    transition: color 0.3s ease;
+    height: 100%;
+    padding: 0;
+  }
+
+  .material-symbols-outlined {
+    font-size: 24px;
+    transition: color 0.3s ease;
+  }
+
+  .validation-messages {
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+
+  .validation-messages p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .validation-messages .material-symbols-outlined {
+    margin-right: 8px;
+    font-size: 20px;
+  }
 
 
-/* Ocultar el ojo nativo del navegador */
-input::-ms-reveal, input::-webkit-credentials-auto-fill-button {
-  display: none;
-}
+  .invalid {
+    color: red;
+  }
 
-.password-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.password-container input {
-  width: 100%;
-  padding: 10px;
-  padding-right: 40px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #666;
-  transition: color 0.3s ease;
-  height: 100%;
-  padding: 0;
-}
-
-.material-symbols-outlined {
-  font-size: 24px;
-  transition: color 0.3s ease;
-}
-
-/* Mensajes de validación */
-.validation-messages {
-  margin-top: 10px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-}
-
-.validation-messages p {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.validation-messages .material-symbols-outlined {
-  margin-right: 8px;
-  font-size: 20px;
-}
-
-/* Estilos cuando la regla no se cumple */
-.invalid {
-  color: red;
-}
-
-/* Estilos cuando la regla se cumple */
-.valid {
-  color: green;
-}
+  .valid {
+    color: green;
+  }
 </style>
 
 
