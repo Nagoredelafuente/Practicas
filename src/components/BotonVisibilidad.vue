@@ -1,96 +1,95 @@
 <script setup>
-  import { ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 
-  const props = defineProps({
-    route: {
-      type: String,
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    showValidations: { 
-      type: Boolean,
-      default: false,
-    }
-  });
-
-  const password = ref('');
-  const isPasswordVisible = ref(false);
-  const hasStartedTyping = ref(false);
-
-  const validationRules = [
-    { id: 'length', regex: /.{8,16}/, message: 'Entre 8 y 16 caracteres' },
-    { id: 'case', regex: /(?=.*[a-z])(?=.*[A-Z])/, message: 'Al menos una mayúscula y una minúscula' },
-    { id: 'number', regex: /(?=.*\d)/, message: 'Al menos un número' },
-  ];
-
-  const validationResults = computed(() => {
-    return validationRules.map(rule => ({
-      id: rule.id,
-      message: rule.message,
-      isValid: rule.regex.test(password.value),
-    }));
-  });
-
-  function alternarVisibilidadPassword() {
-    isPasswordVisible.value = !isPasswordVisible.value;
+const props = defineProps({
+  route: {
+    type: String,
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  showValidations: { 
+    type: Boolean,
+    default: false,
   }
+});
 
-  function handleTyping() {
-    if (!hasStartedTyping.value) {
-      hasStartedTyping.value = true;
-    }
-    emit('update:modelValue', password.value);
-  };
+const password = defineModel();
+const isPasswordVisible = ref(false);
+const hasStartedTyping = ref(false); 
+
+const validationRules = [
+  { id: 'length', regex: /.{8,16}/, message: 'Entre 8 y 16 caracteres' },
+  { id: 'case', regex: /(?=.*[a-z])(?=.*[A-Z])/, message: 'Al menos una mayúscula y una minúscula' },
+  { id: 'number', regex: /(?=.*\d)/, message: 'Al menos un número' },
+];
+
+const validationResults = computed(() => {
+  return validationRules.map(rule => ({
+    id: rule.id,
+    message: rule.message,
+    isValid: rule.regex.test(password.value),
+  }));
+});
+
+function alternarVisibilidadPassword() {
+  isPasswordVisible.value = !isPasswordVisible.value;
+}
+
+function handleTyping() {
+  if (!hasStartedTyping.value) {
+    hasStartedTyping.value = true;
+  }
+}
 </script>
 
 <template>
-  <head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-  </head>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    </head>
 
-  <div class="form-group" :to="route">
-    <label for="contraseña">Contraseña</label>
-    <div class="password-container">
-      <input 
-        :type="isPasswordVisible ? 'text' : 'password'" 
-        id="contraseña"
-        v-model="password" 
-        name="contraseña"
-        :placeholder="placeholder"
-        maxlength="50"
-        required
-        @input="handleTyping"
-      />
-      <button 
-        type="button" 
-        class="toggle-password" 
-        @click="alternarVisibilidadPassword"
-        aria-label="Mostrar/Ocultar contraseña"
-      >
-        <span class="material-symbols-outlined">
-          {{ isPasswordVisible ? 'visibility_off' : 'visibility' }}
-        </span>
-      </button>
-    </div>
+    <div class="form-group" :to="route">
+        <label for="contraseña">Contraseña</label>
+        <div class="password-container">
+            <input 
+                :type="isPasswordVisible ? 'text' : 'password'" 
+                id="contraseña"
+                v-model="password" 
+                name="contraseña"
+                :placeholder="placeholder"
+                maxlength="50"
+                required
+                @input="handleTyping"
+            />
+            <button 
+                type="button" 
+                class="toggle-password" 
+                @click="alternarVisibilidadPassword"
+                aria-label="Mostrar/Ocultar contraseña"
+            >
+                <span class="material-symbols-outlined">
+                    {{ isPasswordVisible ? 'visibility_off' : 'visibility' }}
+                </span>
+            </button>
+        </div>
 
-    <div class="validation-messages" v-if="showValidations && hasStartedTyping">
-      <p 
-        v-for="rule in validationResults" 
-        :key="rule.id" 
-        :class="{ 'valid': rule.isValid, 'invalid': !rule.isValid }"
-      >
-        <span class="material-symbols-outlined">
-          {{ rule.isValid ? 'check_circle' : 'cancel' }}
-        </span>
-        {{ rule.message }}
-      </p>
+        <div class="validation-messages" v-if="showValidations && hasStartedTyping">
+            <p 
+                v-for="rule in validationResults" 
+                :key="rule.id" 
+                :class="{ 'valid': rule.isValid, 'invalid': !rule.isValid }"
+            >
+                <span class="material-symbols-outlined">
+                    {{ rule.isValid ? 'check_circle' : 'cancel' }}
+                </span>
+                {{ rule.message }}
+            </p>
+        </div>
     </div>
-  </div>
 </template>
 
-<style scoped>
+<style>
   .form-group {
     width: 100%;
     margin-bottom: 1rem;
@@ -161,6 +160,7 @@
     font-size: 20px;
   }
 
+
   .invalid {
     color: red;
   }
@@ -169,3 +169,7 @@
     color: green;
   }
 </style>
+
+
+
+
