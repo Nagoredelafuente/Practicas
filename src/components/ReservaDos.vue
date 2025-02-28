@@ -9,8 +9,7 @@
 </script>
 
 <template>
-    <button >{{ text }}</button>
-    <!--@click="$emit('click')"-->
+    <button>{{ text}}</button>
 </template>
 
 <style scoped lang="scss">

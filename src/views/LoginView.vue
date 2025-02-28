@@ -30,7 +30,7 @@ function redirectToReservaValidation() {
   if (!password.value) {
     errores.push("Por favor, introduce tu contraseña.");
   }
-
+  
   if (errores.length > 0) {
     alert("Errores detectados:\n- " + errores.join("\n- "));
     return;

@@ -105,9 +105,9 @@ defineExpose({
         .cabecera {
             width: 100%;
             background-color: #765DF5;
-            padding: 15px;
+            padding: 10px;
             text-align: center;
-            margin-top: 20px; 
+            margin-top: 0px; 
         }
 
         nav {
@@ -134,6 +134,7 @@ defineExpose({
             font-size: 1.2rem;
             color:white;
             cursor: pointer;
+            margin-top: -30px;
             
         }
 
@@ -160,7 +161,7 @@ defineExpose({
             width: 100%; 
             max-width: 600px; 
             align-items: center;
-            margin-top: 40px;
+            margin-top: 0px;
         }
 
         .persona {
